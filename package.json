@@ -1,0 +1,21 @@
+{
+  "name": "chatgptweb",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chatgpt": "^4.7.2",
+    "cors": "^2.8.5",
+    "dotenv-safe": "^8.2.0",
+    "express": "^4.18.2",
+    "openai": "^3.1.0",
+    "ora": "^6.1.2",
+    "puppeteer": "^19.7.2"
+  }
+}
