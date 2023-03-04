@@ -20,6 +20,13 @@ const port = 9000
 app.use(cors())
 app.use(express.json());
 
+const officialAPI = new ChatGPTAPI({ apiKey: process.env.OPENAI_API_KEY })
+const proxyAPI = new ChatGPTUnofficialProxyAPI({
+    apiReverseProxyUrl: process.env.ReverseProxyUrl,
+    accessToken: process.env.OPENAI_ACCESS_TOKEN,
+    debug: false
+})
+
 app.post('/chatbyproxy', async (req, res) => {
     const prompt = req.body.prompt
     const conversationId = req.body.conversationId
@@ -51,32 +58,22 @@ app.listen(port, () => {
 })
 
 async function callChatGPT(prompt, conversationId, parentMessageId) {
-    const api = new ChatGPTAPI({ apiKey: process.env.OPENAI_API_KEY })
-
     console.log('request: ' + prompt + '\n')
-    let res = await api.sendMessage(prompt, {
+    let res = await officialAPI.sendMessage(prompt, {
         conversationId: conversationId,
         parentMessageId: parentMessageId
     })
     console.log('response: ' + res.text + '\n')
-
     return res
 }
 
 async function callChatGPTByProxy(prompt, conversationId, parentMessageId) {
-    const api = new ChatGPTUnofficialProxyAPI({
-        apiReverseProxyUrl: process.env.ReverseProxyUrl,
-        accessToken: process.env.OPENAI_ACCESS_TOKEN,
-        debug: false
-    })
-
     console.log('request: ' + prompt + '\n')
-    let res = await api.sendMessage(prompt, {
+    let res = await proxyAPI.sendMessage(prompt, {
         conversationId: conversationId,
         parentMessageId: parentMessageId
     })
     console.log('response: ' + res.text + '\n')
-
     return res
 }
 
